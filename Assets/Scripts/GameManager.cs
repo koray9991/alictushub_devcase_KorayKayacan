@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour
 
 
     public Transform player;
-    public Transform spawnPoint;
+    
     public Camera cam;
     public bool isSpawnPointInsideCam;
     public Transform bulletParent;
@@ -22,7 +22,10 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI coinText;
     int killCount;
     public TextMeshProUGUI killText;
-    
+    public Transform ground;
+    public Transform enemySpawnPoints;
+    float enemySpawnTimer;
+    public float enemySpawnTime;
     private void Awake()
     {
         if (instance == null) { instance = this; }
@@ -32,34 +35,20 @@ public class GameManager : MonoBehaviour
         coinCount = PlayerPrefs.GetInt("coinCount");
         SetCoin(0);
         SpawnCoins();
+     
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.K))
+       
+
+        PlaneCheck();
+        enemySpawnTimer += Time.deltaTime;
+        if (enemySpawnTimer > enemySpawnTime)
         {
-            SetSpawnPoint();
+            enemySpawnTimer = 0;
+            SpawnEnemy();
         }
-        //if (spawnPoint != null)
-        //{
-            
-        //    Vector3 viewportPoint = cam.WorldToViewportPoint(spawnPoint.position);
-
-           
-        //    bool kameraTarafindanGoruluyor = (viewportPoint.x >= 0 && viewportPoint.x <= 1 &&
-        //                                       viewportPoint.y >= 0 && viewportPoint.y <= 1 &&
-        //                                       viewportPoint.z > 0);
-
-        //    if (kameraTarafindanGoruluyor)
-        //    {
-        //        isSpawnPointInsideCam = true;
-                
-        //    }
-        //    else
-        //    {
-        //        isSpawnPointInsideCam = false;
-        //    }
-        //}
 
 
 
@@ -85,13 +74,22 @@ public class GameManager : MonoBehaviour
             var enemy = Lean.Pool.LeanPool.Spawn(enemyPrefab);
             enemy.GetComponent<Enemy>().enabled = true;
             enemy.GetComponent<Enemy>().isDead = false;
-            enemy.transform.position = spawnPoint.position;
+            GetComponent<CapsuleCollider>().enabled = true;
+            enemy.transform.position = enemySpawnPoints.GetChild(Random.Range(0,enemySpawnPoints.childCount)).position;
             enemy.GetComponent<Enemy>().targetPlayer = player;
             enemy.transform.parent = enemyPool.transform;
         }
        
 
     }
+    public void PlaneCheck()
+    {
+        if (Vector3.Distance(player.position, ground.position) > 200)
+        {
+            ground.position = new Vector3(player.transform.position.x, ground.position.y, player.transform.position.z);
+        }
+    }
+
     public void SetCoin(int value)
     {
         coinCount += value;
@@ -103,9 +101,5 @@ public class GameManager : MonoBehaviour
         killCount += 1;
         killText.text = killCount.ToString();
     }
-    public void SetSpawnPoint()
-    {
-        spawnPoint.position = player.transform.position + new Vector3(Random.Range(-20f, 20f), 0, Random.Range(-20f, 20f));
-        SpawnEnemy();
-    }
+
 }

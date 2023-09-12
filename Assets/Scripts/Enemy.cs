@@ -84,6 +84,7 @@ public class Enemy : MonoBehaviour
             targetPlayer.GetComponent<PlayerAttack>().closestTarget = null;
         }
         this.enabled = false;
+        GetComponent<CapsuleCollider>().enabled = false;
         DOVirtual.DelayedCall(3, () =>
         {
             Lean.Pool.LeanPool.Despawn(gameObject);

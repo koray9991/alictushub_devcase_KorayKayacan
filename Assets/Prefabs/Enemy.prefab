@@ -722,7 +722,7 @@ MonoBehaviour:
   navmesh: {fileID: 2423973406300354117}
   anim: {fileID: 2949229598531514892}
   isInRange: 0
-  range: 10
+  range: 11
   moveSpeed: 0
   bulletSpawnPos: {fileID: 5647214778121901478}
   bullet: {fileID: 3614318789249813634}
