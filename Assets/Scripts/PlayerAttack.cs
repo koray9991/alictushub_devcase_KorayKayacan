@@ -28,11 +28,7 @@ public class PlayerAttack : MonoBehaviour
     private void Update()
     {
         FindClosestEnemy();
-
-
         AttackState();
-
-
     }
     public void AttackState()
     {

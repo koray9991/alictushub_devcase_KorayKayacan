@@ -10,7 +10,6 @@ public class PlayerMovement : MonoBehaviour
     Vector3 mouseDown;
     public FloatingJoystick js;
     public float moveSpeed;
-    bool moving;
      enum AnimationState
     {
         idle,
@@ -48,7 +47,6 @@ public class PlayerMovement : MonoBehaviour
                         animState = AnimationState.walk;
                         anim.SetTrigger("Walk");
                     }
-                    moving = true;
                 }
 
 
@@ -61,7 +59,6 @@ public class PlayerMovement : MonoBehaviour
                     animState = AnimationState.idle;
                     anim.SetTrigger("Idle");
                 }
-                moving = true;
             }
         }
     }
