@@ -14,6 +14,7 @@ public class Enemy : MonoBehaviour
     public float moveSpeed;
     public Transform bulletSpawnPos;
     public GameObject bullet;
+    public GameManager gm;
     enum AnimationState
     {
         walk,
@@ -25,7 +26,9 @@ public class Enemy : MonoBehaviour
     {
         anim = GetComponent<Animator>();
         navmesh = GetComponent<NavMeshAgent>();
+        gm = FindObjectOfType<GameManager>();
         navmesh.SetDestination(targetPlayer.position);
+        bullet.transform.parent = gm.bulletParent;
 
     }
     private void Update()
@@ -50,13 +53,18 @@ public class Enemy : MonoBehaviour
                 anim.SetTrigger("Attack");
                 navmesh.isStopped = true;
             }
+            var lookPos = targetPlayer.position - transform.position;
+            lookPos.y = 0;
+            var rotation = Quaternion.LookRotation(lookPos);
+            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * 20);
         }
         
     }
     public void SkeletonThrowing()
     {
+        bullet.SetActive(false);
         bullet.transform.position = bulletSpawnPos.position;
-        var Vector = targetPlayer.position - transform.position;
+        var Vector = targetPlayer.position - bulletSpawnPos.position;
         Vector.y = 0;
         bullet.SetActive(true);
         bullet.GetComponent<Bullet>().direction = Vector;

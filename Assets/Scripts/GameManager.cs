@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
     public Transform spawnPoint;
     public Camera cam;
     public bool isSpawnPointInsideCam;
+    public Transform bulletParent;
     void Start()
     {
 
