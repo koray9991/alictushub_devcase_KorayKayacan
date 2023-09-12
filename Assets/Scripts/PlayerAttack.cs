@@ -13,7 +13,7 @@ public class PlayerAttack : MonoBehaviour
     public bool enemyIsInRange;
     [SerializeField] float fireRate;
     public GameObject closestTarget;
-
+    [SerializeField] GameObject handBoomerang;
     void Start()
     {
         rangeObject.transform.localScale = new Vector3(range * 2, rangeObject.transform.localScale.y, range * 2);
@@ -30,11 +30,14 @@ public class PlayerAttack : MonoBehaviour
 
         if (canAttack && enemyIsInRange)
         {
+            handBoomerang.SetActive(false);
             canAttack = false;
             StartCoroutine(FireRateControl());
             var currentBoomerang = boomerangPool[boomerangNumber];
             currentBoomerang.SetActive(true);
-            currentBoomerang.transform.DOJump(closestTarget.GetComponent<Enemy>().boomerangTarget.position, 3, 1, 0.3f).OnComplete(() => {
+            var boomerangChild = currentBoomerang.transform.GetChild(0);
+            boomerangChild.DOLocalJump(Vector3.zero, Random.Range(2f, 7f), 1, 0.5f);
+            currentBoomerang.transform.DOJump(closestTarget.GetComponent<Enemy>().boomerangTarget.position, Random.Range(2f,7f), 1, 0.5f).OnComplete(() => {
                 currentBoomerang.SetActive(false);
                 currentBoomerang.transform.position = boomerangParent.transform.position;
             });
@@ -46,6 +49,7 @@ public class PlayerAttack : MonoBehaviour
     {
         yield return new WaitForSeconds(fireRate);
         canAttack = true;
+        handBoomerang.SetActive(true);
     }
   
     void FindClosestEnemy()
