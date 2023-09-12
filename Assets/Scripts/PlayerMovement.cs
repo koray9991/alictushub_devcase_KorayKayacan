@@ -6,7 +6,7 @@ public class PlayerMovement : MonoBehaviour
 {
 
     Rigidbody rb;
-    Animator anim;
+     Animator anim;
     Vector3 mouseDown;
     public FloatingJoystick js;
     public float moveSpeed;
@@ -61,5 +61,10 @@ public class PlayerMovement : MonoBehaviour
                 }
             }
         }
+    }
+    public void Death()
+    {
+        anim.SetTrigger("Death");
+        rb.isKinematic = true;
     }
 }

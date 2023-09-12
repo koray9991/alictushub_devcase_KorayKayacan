@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using DG.Tweening;
 public class Enemy : MonoBehaviour
 {
     public Transform boomerangTarget;
@@ -15,6 +16,7 @@ public class Enemy : MonoBehaviour
     public Transform bulletSpawnPos;
     public GameObject bullet;
     public GameManager gm;
+    public bool isDead;
     enum AnimationState
     {
         walk,
@@ -31,6 +33,7 @@ public class Enemy : MonoBehaviour
         bullet.transform.parent = gm.bulletParent;
 
     }
+   
     private void Update()
     {
 
@@ -62,12 +65,30 @@ public class Enemy : MonoBehaviour
     }
     public void SkeletonThrowing()
     {
-        bullet.SetActive(false);
+        bullet.GetComponent<TrailRenderer>().time = 0;
         bullet.transform.position = bulletSpawnPos.position;
         var Vector = targetPlayer.position - bulletSpawnPos.position;
         Vector.y = 0;
         bullet.SetActive(true);
         bullet.GetComponent<Bullet>().direction = Vector;
+        DOVirtual.DelayedCall(0.2f, () =>
+        {
+            bullet.GetComponent<TrailRenderer>().time = 0.2f;
+        });
+       
     }
-    
+    public void Death()
+    {
+        isDead = true;
+        anim.SetTrigger("Death");
+        if(targetPlayer.GetComponent<PlayerAttack>().closestTarget == transform)
+        {
+            targetPlayer.GetComponent<PlayerAttack>().closestTarget = null;
+        }
+        this.enabled = false;
+        DOVirtual.DelayedCall(3, () =>
+        {
+            Lean.Pool.LeanPool.Despawn(gameObject);
+        });
+    }
 }

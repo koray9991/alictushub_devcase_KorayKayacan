@@ -6,7 +6,7 @@ public class Bullet : MonoBehaviour
 {
     public Vector3 direction;
     public float speed;
-
+    public float bulletDamage;
     private void FixedUpdate()
     {
         transform.position += direction.normalized * speed;

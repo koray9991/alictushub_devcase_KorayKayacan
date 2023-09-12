@@ -53,9 +53,17 @@ public class GameManager : MonoBehaviour
     public void SpawnEnemy()
     {
         
-        var enemy = Lean.Pool.LeanPool.Spawn(enemyPrefab);
-        enemy.transform.position = spawnPoint.position;
-        enemy.GetComponent<Enemy>().targetPlayer = player;
+        if (enemyPool.Spawned < enemyPool.Capacity)
+        {
+            var enemy = Lean.Pool.LeanPool.Spawn(enemyPrefab);
+            enemy.GetComponent<Enemy>().enabled = true;
+            enemy.GetComponent<Enemy>().isDead = false;
+            enemy.transform.position = spawnPoint.position;
+            enemy.GetComponent<Enemy>().targetPlayer = player;
+            
+        }
+       
+
     }
     public void SetSpawnPoint()
     {

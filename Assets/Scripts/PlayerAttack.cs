@@ -34,6 +34,11 @@ public class PlayerAttack : MonoBehaviour
     {
         if (canAttack && enemyIsInRange)
         {
+            var target = closestTarget;
+            if (closestTarget.GetComponent<Enemy>().isDead)
+            {
+                return;
+            }
             handBoomerang.SetActive(false);
             canAttack = false;
             StartCoroutine(FireRateControl());
@@ -41,9 +46,12 @@ public class PlayerAttack : MonoBehaviour
             currentBoomerang.SetActive(true);
             var boomerangChild = currentBoomerang.transform.GetChild(0);
             boomerangChild.DOLocalJump(Vector3.zero, Random.Range(-5f, 5f), 1, 0.5f);
+           
             currentBoomerang.transform.DOJump(closestTarget.GetComponent<Enemy>().boomerangTarget.position, Random.Range(1f, 4f), 1, 0.5f).OnComplete(() => {
                 currentBoomerang.SetActive(false);
                 currentBoomerang.transform.position = boomerangParent.transform.position;
+                target.GetComponent<Enemy>().Death();
+                
             });
             boomerangNumber += 1;
             if (boomerangNumber == boomerangPool.Count)
@@ -65,8 +73,16 @@ public class PlayerAttack : MonoBehaviour
     {
         float distanceClosestEnemy = Mathf.Infinity;
         Enemy closestEnemy = null;
-        Enemy[] allEnemies = FindObjectsOfType<Enemy>();
-        if (allEnemies.Length != 0)
+        List<Enemy> allEnemies = new List<Enemy>();
+        foreach (Enemy enemy in FindObjectsOfType<Enemy>())
+        {
+            if (!enemy.GetComponent<Enemy>().isDead)
+            {
+                allEnemies.Add(enemy);
+            }
+
+        }
+        if (allEnemies.Count != 0)
         {
             foreach (Enemy currentEnemy in allEnemies)
             {

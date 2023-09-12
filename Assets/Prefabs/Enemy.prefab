@@ -721,7 +721,7 @@ MonoBehaviour:
   navmesh: {fileID: 2423973406300354117}
   anim: {fileID: 2949229598531514892}
   isInRange: 0
-  range: 5
+  range: 10
   moveSpeed: 0
   bulletSpawnPos: {fileID: 5647214778121901478}
   bullet: {fileID: 3614318789249813634}
@@ -991,6 +991,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   direction: {x: 0, y: 0, z: 0}
   speed: 0.1
+  bulletDamage: 5
 --- !u!96 &8858044783268657796
 TrailRenderer:
   serializedVersion: 2
