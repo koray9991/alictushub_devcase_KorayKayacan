@@ -7,12 +7,12 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] GameObject rangeObject;
     [SerializeField] GameObject handBoomerang;
     public GameObject closestTarget;
-    public float range;
-    public Transform boomerangParent;
+    [SerializeField] float range;
+    [SerializeField] Transform boomerangParent;
     public List<GameObject> boomerangPool;
     int boomerangNumber;
     bool canAttack;
-    public bool enemyIsInRange;
+    bool enemyIsInRange;
     [SerializeField] float fireRate;
    
     

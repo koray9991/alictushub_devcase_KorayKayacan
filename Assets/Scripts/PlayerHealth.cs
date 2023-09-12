@@ -28,9 +28,6 @@ public class PlayerHealth : MonoBehaviour
                 {
                     dead = true;
                     playerMovement.Death();
-                    GetComponent<PlayerMovement>().enabled = false;
-                    GetComponent<PlayerAttack>().enabled = false;
-
                 }
                
             }
@@ -46,9 +43,6 @@ public class PlayerHealth : MonoBehaviour
                 {
                     dead = true;
                     playerMovement.Death();
-                    GetComponent<PlayerMovement>().enabled = false;
-                    GetComponent<PlayerAttack>().enabled = false;
-
                 }
 
             }

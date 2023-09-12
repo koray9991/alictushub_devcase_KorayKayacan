@@ -2,30 +2,34 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
+using DG.Tweening;
 public class GameManager : MonoBehaviour
 {
+    [Header("Singleton")]
     public static GameManager instance;
+
+    [Header("ObjectPool")]
     public Lean.Pool.LeanGameObjectPool enemyPool;
     public GameObject enemyPrefab;
-
     public Lean.Pool.LeanGameObjectPool coinPool;
     public GameObject coinPrefab;
 
-
-    public Transform player;
-    
-    public Camera cam;
-    public bool isSpawnPointInsideCam;
-    public Transform bulletParent;
-
+    [Header("UI")]
     int coinCount;
     public TextMeshProUGUI coinText;
     int killCount;
     public TextMeshProUGUI killText;
-    public Transform ground;
-    public Transform enemySpawnPoints;
+    [SerializeField] GameObject endPanel;
+
+    [Header("Others")]
+    public Transform player;
+    public Transform bulletParent;
+    [SerializeField] Transform ground;
+    [SerializeField] Transform enemySpawnPoints;
     float enemySpawnTimer;
-    public float enemySpawnTime;
+    [SerializeField] float enemySpawnTime;
+   
     private void Awake()
     {
         if (instance == null) { instance = this; }
@@ -43,19 +47,34 @@ public class GameManager : MonoBehaviour
        
 
         PlaneCheck();
+
+        EnemySpawnControl();
+
+
+
+
+    }
+    public void EnemySpawnControl()
+    {
         enemySpawnTimer += Time.deltaTime;
         if (enemySpawnTimer > enemySpawnTime)
         {
             enemySpawnTimer = 0;
             SpawnEnemy();
         }
-
-
-
-
-
     }
-
+    public void GameOver()
+    {
+        DOVirtual.DelayedCall(2, () =>
+        {
+            endPanel.SetActive(true);
+        });
+       
+    }
+    public void Restart()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
     public void SpawnCoins()
     {
         for (int i = 0; i < coinPool.Capacity; i++)
@@ -74,7 +93,7 @@ public class GameManager : MonoBehaviour
             var enemy = Lean.Pool.LeanPool.Spawn(enemyPrefab);
             enemy.GetComponent<Enemy>().enabled = true;
             enemy.GetComponent<Enemy>().isDead = false;
-            GetComponent<CapsuleCollider>().enabled = true;
+            enemy.GetComponent<CapsuleCollider>().enabled = true;
             enemy.transform.position = enemySpawnPoints.GetChild(Random.Range(0,enemySpawnPoints.childCount)).position;
             enemy.GetComponent<Enemy>().targetPlayer = player;
             enemy.transform.parent = enemyPool.transform;

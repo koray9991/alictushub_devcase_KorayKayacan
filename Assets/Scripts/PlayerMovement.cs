@@ -66,5 +66,8 @@ public class PlayerMovement : MonoBehaviour
     {
         anim.SetTrigger("Death");
         rb.isKinematic = true;
+        GameManager.instance.GameOver();
+        GetComponent<PlayerMovement>().enabled = false;
+        GetComponent<PlayerAttack>().enabled = false;
     }
 }
