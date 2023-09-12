@@ -8,7 +8,9 @@ public class PlayerHealth : MonoBehaviour
     public Image healthBar;
     public bool dead;
     PlayerMovement playerMovement;
-    
+    [SerializeField] ParticleSystem coinParticle;
+    [SerializeField] ParticleSystem bloodParticle;
+
     void Start()
     {
         playerMovement = GetComponent<PlayerMovement>();
@@ -21,7 +23,8 @@ public class PlayerHealth : MonoBehaviour
         {
             health -= other.GetComponent<Bullet>().bulletDamage;
             healthBar.fillAmount = health / maxHealth;
-
+            other.gameObject.SetActive(false);
+            bloodParticle.Play();
             if (health <= 0)
             {
                 if (!dead)
@@ -36,7 +39,7 @@ public class PlayerHealth : MonoBehaviour
         {
             health = 0;
             healthBar.fillAmount = health / maxHealth;
-
+            bloodParticle.Play();
             if (health <= 0)
             {
                 if (!dead)
@@ -51,6 +54,7 @@ public class PlayerHealth : MonoBehaviour
         {
             GameManager.instance.SetCoin(1);
             other.gameObject.SetActive(false);
+            coinParticle.Play();
         }
     }
 }

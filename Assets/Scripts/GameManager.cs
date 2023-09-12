@@ -80,7 +80,7 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < coinPool.Capacity; i++)
         {
             var coin = Lean.Pool.LeanPool.Spawn(coinPrefab);
-            coin.transform.position = new Vector3(Random.Range(-100f, 100f), 0, Random.Range(-100f, 100f));
+            coin.transform.position = new Vector3(Random.Range(-50f, 50f), 0, Random.Range(-50f, 50f));
             coin.transform.parent = coinPool.transform;
         }
     
