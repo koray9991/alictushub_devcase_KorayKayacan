@@ -14,7 +14,7 @@ public class PlayerAttack : MonoBehaviour
     bool canAttack;
     public bool enemyIsInRange;
     [SerializeField] float fireRate;
-    
+   
     
     void Start()
     {
@@ -51,6 +51,7 @@ public class PlayerAttack : MonoBehaviour
                 currentBoomerang.SetActive(false);
                 currentBoomerang.transform.position = boomerangParent.transform.position;
                 target.GetComponent<Enemy>().Death();
+                GameManager.instance.KillCountChange();
                 
             });
             boomerangNumber += 1;

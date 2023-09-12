@@ -15,7 +15,6 @@ public class Enemy : MonoBehaviour
     public float moveSpeed;
     public Transform bulletSpawnPos;
     public GameObject bullet;
-    public GameManager gm;
     public bool isDead;
     enum AnimationState
     {
@@ -28,9 +27,8 @@ public class Enemy : MonoBehaviour
     {
         anim = GetComponent<Animator>();
         navmesh = GetComponent<NavMeshAgent>();
-        gm = FindObjectOfType<GameManager>();
         navmesh.SetDestination(targetPlayer.position);
-        bullet.transform.parent = gm.bulletParent;
+        bullet.transform.parent = GameManager.instance.bulletParent;
 
     }
    

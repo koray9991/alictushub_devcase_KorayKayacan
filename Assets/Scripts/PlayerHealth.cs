@@ -8,6 +8,7 @@ public class PlayerHealth : MonoBehaviour
     public Image healthBar;
     public bool dead;
     PlayerMovement playerMovement;
+    
     void Start()
     {
         playerMovement = GetComponent<PlayerMovement>();
@@ -33,6 +34,29 @@ public class PlayerHealth : MonoBehaviour
                 }
                
             }
+        }
+        if (other.GetComponent<Enemy>())
+        {
+            health = 0;
+            healthBar.fillAmount = health / maxHealth;
+
+            if (health <= 0)
+            {
+                if (!dead)
+                {
+                    dead = true;
+                    playerMovement.Death();
+                    GetComponent<PlayerMovement>().enabled = false;
+                    GetComponent<PlayerAttack>().enabled = false;
+
+                }
+
+            }
+        }
+        if (other.tag == "Coin")
+        {
+            GameManager.instance.SetCoin(1);
+            other.gameObject.SetActive(false);
         }
     }
 }
