@@ -5,6 +5,8 @@ using DG.Tweening;
 public class PlayerAttack : MonoBehaviour
 {
     [SerializeField] GameObject rangeObject;
+    [SerializeField] GameObject handBoomerang;
+    public GameObject closestTarget;
     public float range;
     public Transform boomerangParent;
     public List<GameObject> boomerangPool;
@@ -12,8 +14,8 @@ public class PlayerAttack : MonoBehaviour
     bool canAttack;
     public bool enemyIsInRange;
     [SerializeField] float fireRate;
-    public GameObject closestTarget;
-    [SerializeField] GameObject handBoomerang;
+    
+    
     void Start()
     {
         rangeObject.transform.localScale = new Vector3(range * 2, rangeObject.transform.localScale.y, range * 2);
@@ -26,8 +28,14 @@ public class PlayerAttack : MonoBehaviour
     private void Update()
     {
         FindClosestEnemy();
-       
 
+
+        AttackState();
+
+
+    }
+    public void AttackState()
+    {
         if (canAttack && enemyIsInRange)
         {
             handBoomerang.SetActive(false);
@@ -36,15 +44,20 @@ public class PlayerAttack : MonoBehaviour
             var currentBoomerang = boomerangPool[boomerangNumber];
             currentBoomerang.SetActive(true);
             var boomerangChild = currentBoomerang.transform.GetChild(0);
-            boomerangChild.DOLocalJump(Vector3.zero, Random.Range(2f, 7f), 1, 0.5f);
-            currentBoomerang.transform.DOJump(closestTarget.GetComponent<Enemy>().boomerangTarget.position, Random.Range(2f,7f), 1, 0.5f).OnComplete(() => {
+            boomerangChild.DOLocalJump(Vector3.zero, Random.Range(-5f, 5f), 1, 0.5f);
+            currentBoomerang.transform.DOJump(closestTarget.GetComponent<Enemy>().boomerangTarget.position, Random.Range(1f, 4f), 1, 0.5f).OnComplete(() => {
                 currentBoomerang.SetActive(false);
                 currentBoomerang.transform.position = boomerangParent.transform.position;
             });
+            boomerangNumber += 1;
+            if (boomerangNumber == boomerangPool.Count)
+            {
+                boomerangNumber = 0;
+            }
         }
-
-
     }
+
+
     IEnumerator FireRateControl()
     {
         yield return new WaitForSeconds(fireRate);
